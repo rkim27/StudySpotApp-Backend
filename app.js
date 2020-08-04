@@ -12,6 +12,8 @@ app.use(cors());
 
 const insertRouter = require('./routes/insert.js'); //create router
 app.use('/insert', insertRouter);
+const searchRouter = require('./routes/search.js'); //create router
+app.use('/search', searchRouter);
 
 app.get('/', (req, res) => {
 	res.send('Hi, root');
