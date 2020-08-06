@@ -97,6 +97,68 @@ router.get('/buildings/:id', (req, res) => {
 	});
 });
 
+router.get('/room/:id', (req, res) => {
+	const connection = getConnection();
+	const id = req.params.id;
+	const queryString = 'SELECT * FROM rooms WHERE id=?';
+	connection.query(queryString, [id], (err, rows, fields) => {
+		if (err) {
+			console.log('Failed to get: ' + err); //if query error
+			res.sendStatus(500);
+			return;
+		}
+		const room = rows.map((row) => {
+			return {
+				id: row.id,
+				name: row.title,
+				floor: row.flr,
+				number: row.num,
+				buildId: row.buildingId,
+				avail: row.available,
+			};
+		});
+		res.send(room);
+	});
+});
+
+router.get('/library/:id', (req, res) => {
+	const connection = getConnection();
+	const id = req.params.id;
+	const queryString = 'SELECT * FROM libraries WHERE id=?';
+	connection.query(queryString, [id], (err, rows, fields) => {
+		if (err) {
+			console.log('Failed to get: ' + err); //if query error
+			res.sendStatus(500);
+			return;
+		}
+		const library = rows.map((row) => {
+			return {
+				id: row.id,
+				name: row.title,
+				floor: row.flr,
+				numSeats: row.numSeats,
+				buildId: row.buildingId,
+			};
+		});
+		res.send(library);
+	});
+});
+
+router.post('/updateroom/:id', (req, res) => {
+	const connection = getConnection();
+	const id = req.params.id;
+	const avail = req.body.avail === 1 ? 0 : 1;
+	const queryString = 'UPDATE rooms SET available=? WHERE id=?';
+	connection.query(queryString, [avail, id], (err, rows, fields) => {
+		if (err) {
+			console.log('Failed to get: ' + err); //if query error
+			res.sendStatus(500);
+			return;
+		}
+		res.sendStatus(200);
+	});
+});
+
 const pool = mysql.createPool({
 	connectionLimit: 10,
 	host: 'localhost',
