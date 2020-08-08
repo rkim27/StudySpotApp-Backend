@@ -145,10 +145,26 @@ router.get('/library/:id', (req, res) => {
 });
 
 router.post('/updateroom/:id', (req, res) => {
+	//combine with below function
 	const connection = getConnection();
 	const id = req.params.id;
 	const avail = req.body.avail === 1 ? 0 : 1;
 	const queryString = 'UPDATE rooms SET available=? WHERE id=?';
+	connection.query(queryString, [avail, id], (err, rows, fields) => {
+		if (err) {
+			console.log('Failed to get: ' + err); //if query error
+			res.sendStatus(500);
+			return;
+		}
+		res.sendStatus(200);
+	});
+});
+
+router.post('/updatelibrary/:id', (req, res) => {
+	const connection = getConnection();
+	const id = req.params.id;
+	const avail = req.body.avail;
+	const queryString = 'UPDATE libraries SET numSeats=? WHERE id=?';
 	connection.query(queryString, [avail, id], (err, rows, fields) => {
 		if (err) {
 			console.log('Failed to get: ' + err); //if query error
