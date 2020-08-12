@@ -101,7 +101,11 @@ router.get('/:id', (req, res) => {
 			res.sendStatus(500);
 			return;
 		}
-		res.send(rows[0].title);
+		if (rows.length > 0) {
+			res.send(rows[0].title);
+		} else {
+			res.sendStatus(404);
+		}
 	});
 });
 
@@ -139,6 +143,7 @@ router.get('/buildings/:id', (req, res) => {
 			res.sendStatus(500);
 			return;
 		}
+
 		const buildings = rows.map((row) => {
 			return {
 				id: row.id,
@@ -160,17 +165,21 @@ router.get('/room/:id', (req, res) => {
 			res.sendStatus(500);
 			return;
 		}
-		const room = rows.map((row) => {
-			return {
-				id: row.id,
-				name: row.title,
-				floor: row.flr,
-				number: row.num,
-				buildId: row.buildingId,
-				avail: row.available,
-			};
-		});
-		res.send(room);
+		if (rows.length > 0) {
+			const room = rows.map((row) => {
+				return {
+					id: row.id,
+					name: row.title,
+					floor: row.flr,
+					number: row.num,
+					buildId: row.buildingId,
+					avail: row.available,
+				};
+			});
+			res.send(room);
+		} else {
+			res.sendStatus(404);
+		}
 	});
 });
 
@@ -185,16 +194,20 @@ router.get('/library/:id', (req, res) => {
 			res.sendStatus(500);
 			return;
 		}
-		const library = rows.map((row) => {
-			return {
-				id: row.id,
-				name: row.title,
-				floor: row.flr,
-				numSeats: row.numSeats,
-				buildId: row.buildingId,
-			};
-		});
-		res.send(library);
+		if (rows.length > 0) {
+			const library = rows.map((row) => {
+				return {
+					id: row.id,
+					name: row.title,
+					floor: row.flr,
+					numSeats: row.numSeats,
+					buildId: row.buildingId,
+				};
+			});
+			res.send(library);
+		} else {
+			res.sendStatus(404);
+		}
 	});
 });
 
