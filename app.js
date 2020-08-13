@@ -12,8 +12,12 @@ app.use(cors());
 
 const insertRouter = require('./routes/insert.js'); //create router
 app.use('/insert', insertRouter);
-const searchRouter = require('./routes/search.js'); //create router
-app.use('/search', searchRouter);
+const placeRouter = require('./routes/place.js'); //create router
+app.use('/place', placeRouter);
+const schoolRouter = require('./routes/school.js');
+app.use('/school', schoolRouter);
+const buildingRouter = require('./routes/school.js');
+app.use('/building', buildingRouter);
 
 app.get('/', (req, res) => {
 	res.send('Hi, root');
