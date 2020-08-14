@@ -10,6 +10,8 @@ app.use(express.static('.'));
 app.use(morgan('short'));
 app.use(cors());
 
+/*decided to separate queries and not do joins, data pulled can be kept separate, without having to pull info from other tables
+For example, I only need school or building name once, not for every room/library*/
 const insertRouter = require('./routes/insert.js'); //create router
 app.use('/insert', insertRouter);
 const placeRouter = require('./routes/place.js'); //create router
