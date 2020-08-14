@@ -4,6 +4,6 @@ Backend for StudySpotApp, an app where people can find the availability of rooms
 
 localhost version
 
--App hosted later in heroku but not specified in this repo
+App hosted later in heroku but not shown in this repo
 
 Written with express
