@@ -18,7 +18,7 @@ const placeRouter = require('./routes/place.js'); //create router
 app.use('/place', placeRouter);
 const schoolRouter = require('./routes/school.js');
 app.use('/school', schoolRouter);
-const buildingRouter = require('./routes/school.js');
+const buildingRouter = require('./routes/building.js');
 app.use('/building', buildingRouter);
 
 app.get('/', (req, res) => {
