@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql');
+const pool = require('../functions/pool');
 const error = require('../functions/error');
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
 	const id = req.body.id; //id either null if new entry or id of entry to update
 	const name = req.body.school;
 	const update = req.body.update; //boolean if updating or new entry
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const queryString = update
 		? `UPDATE schools SET title=? WHERE id=?`
 		: 'INSERT INTO schools (title) VALUES(?)';
@@ -26,7 +26,7 @@ router.post('/building', (req, res) => {
 	const name = req.body.building;
 	const schoolId = req.body.schoolId;
 	const update = req.body.update; //boolean if updating or new entry
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	//init buildings name and id, upon update only change title
 	const queryString = update
 		? `UPDATE buildings SET title=? WHERE id=?`
@@ -48,7 +48,7 @@ router.post('/building/room', (req, res) => {
 	const update = req.body.update; //boolean if updating or new entry
 	const buildId = req.body.buildId;
 	const schoolId = req.body.schoolId;
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	//init buildings name and id, upon update only change title
 	const queryString = update
 		? `UPDATE rooms SET title=?, flr=?, num=? WHERE id=?`
@@ -71,7 +71,7 @@ router.post('/building/library', (req, res) => {
 	const update = req.body.update; //boolean if updating or new entry
 	const buildId = req.body.buildId;
 	const schoolId = req.body.schoolId;
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	//init buildings name and id, upon update only change title
 	const queryString = update
 		? `UPDATE libraries SET title=?, flr=? WHERE id=?`
@@ -88,7 +88,7 @@ router.post('/building/library', (req, res) => {
 router.delete('/delete/:id', (req, res) => {
 	const id = req.params.id;
 	const table = req.body.tab;
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	//user cant specifically change table value, handled internally
 	const queryString = `DELETE FROM ${table} WHERE id=?`;
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -96,17 +96,5 @@ router.delete('/delete/:id', (req, res) => {
 		res.send('Deleted');
 	});
 });
-
-const pool = mysql.createPool({
-	connectionLimit: 10,
-	host: 'localhost',
-	user: 'root',
-	password: 'landoftheHigh77',
-	database: 'appdb',
-});
-
-function getConnection() {
-	return pool;
-}
 
 module.exports = router;

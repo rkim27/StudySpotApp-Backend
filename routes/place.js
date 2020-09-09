@@ -1,11 +1,11 @@
 const express = require('express');
-const mysql = require('mysql');
+const pool = require('../functions/pool');
 const router = express.Router();
 const error = require('../functions/error');
 
 router.get('/room/:id', (req, res) => {
 	//get certain room
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM rooms WHERE id=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -30,7 +30,7 @@ router.get('/room/:id', (req, res) => {
 
 router.get('/library/:id', (req, res) => {
 	//get certain lib
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM libraries WHERE id=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -54,7 +54,7 @@ router.get('/library/:id', (req, res) => {
 
 router.post('/updateroom/:id', (req, res) => {
 	//update certain room
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const avail = req.body.avail === 1 ? 0 : 1;
 	const queryString = 'UPDATE rooms SET available=? WHERE id=?';
@@ -66,7 +66,7 @@ router.post('/updateroom/:id', (req, res) => {
 
 router.post('/updatelibrary/:id', (req, res) => {
 	//update certain lib
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const avail = req.body.avail;
 	const queryString = 'UPDATE libraries SET numSeats=? WHERE id=?';
@@ -75,17 +75,5 @@ router.post('/updatelibrary/:id', (req, res) => {
 		res.sendStatus(200);
 	});
 });
-
-const pool = mysql.createPool({
-	connectionLimit: 10,
-	host: 'localhost',
-	user: 'root',
-	password: 'landoftheHigh77',
-	database: 'appdb',
-});
-
-function getConnection() {
-	return pool;
-}
 
 module.exports = router;

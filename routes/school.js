@@ -1,11 +1,11 @@
 const express = require('express');
-const mysql = require('mysql');
+const pool = require('../functions/pool');
 const router = express.Router();
 const error = require('../functions/error');
 
 router.get('/', (req, res) => {
 	//get all schools
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const queryString = 'SELECT * FROM schools';
 	connection.query(queryString, (err, rows, fields) => {
 		if (error.catchError(err, res)) return;
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 
 router.get('/rooms/:id', (req, res) => {
 	//get all rooms from school
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM rooms WHERE schoolId=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -38,7 +38,7 @@ router.get('/rooms/:id', (req, res) => {
 
 router.get('/:id', (req, res) => {
 	//get certain school
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM schools WHERE id=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -53,7 +53,7 @@ router.get('/:id', (req, res) => {
 
 router.get('/libraries/:id', (req, res) => {
 	//get all lib from school
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM libraries WHERE schoolId=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -72,7 +72,7 @@ router.get('/libraries/:id', (req, res) => {
 
 router.get('/buildings/:id', (req, res) => {
 	//get all build from school
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM buildings WHERE schoolId=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -86,17 +86,5 @@ router.get('/buildings/:id', (req, res) => {
 		res.send(buildings);
 	});
 });
-
-const pool = mysql.createPool({
-	connectionLimit: 10,
-	host: 'localhost',
-	user: 'root',
-	password: 'landoftheHigh77',
-	database: 'appdb',
-});
-
-function getConnection() {
-	return pool;
-}
 
 module.exports = router;

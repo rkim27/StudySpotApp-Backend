@@ -1,11 +1,11 @@
 const express = require('express');
-const mysql = require('mysql');
+const pool = require('../functions/pool');
 const router = express.Router();
 const error = require('../functions/error');
 
 router.get('/rooms/:id', (req, res) => {
 	//get all rooms for a building
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM rooms WHERE buildingId=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -25,7 +25,7 @@ router.get('/rooms/:id', (req, res) => {
 
 router.get('/libraries/:id', (req, res) => {
 	//get all lib for a building
-	const connection = getConnection();
+	const connection = pool.getConnection();
 	const id = req.params.id;
 	const queryString = 'SELECT * FROM libraries WHERE buildingId=?';
 	connection.query(queryString, [id], (err, rows, fields) => {
@@ -41,17 +41,5 @@ router.get('/libraries/:id', (req, res) => {
 		res.send(libraries);
 	});
 });
-
-const pool = mysql.createPool({
-	connectionLimit: 10,
-	host: 'localhost',
-	user: 'root',
-	password: 'landoftheHigh77',
-	database: 'appdb',
-});
-
-function getConnection() {
-	return pool;
-}
 
 module.exports = router;
